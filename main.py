@@ -21,10 +21,11 @@ def hash_file(file_path):
     return h.hexdigest()
 
 
-logs = []
+
 
 
 while True:
+    logs = []
     with open('./log.txt','r') as logFile:
         for filename in os.listdir(foldername):
             line = logFile.readline().split('\t')
@@ -36,8 +37,11 @@ while True:
                 logs.append('\t'.join(tta) + '\n')
 
                 f = drive.CreateFile({'title': filename})
+                
                 f.SetContentFile(os.path.join(foldername, filename))
                 f.Upload()
+
+                print(f"Uploaded {filename}.")
                 f = None
 
 
