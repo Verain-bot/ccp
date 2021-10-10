@@ -3,11 +3,15 @@ import os
 from pydrive.drive import GoogleDrive
 from pydrive.auth import GoogleAuth
 import time
+import sys
+
+if(len(sys.argv)<2):
+    raise Exception("File name not specified!")
 
 gauth = GoogleAuth()
 gauth.LocalWebserverAuth()       
 drive = GoogleDrive(gauth)
-foldername = r'C:\Users\verai\Desktop\ccproject\Drive'
+foldername = sys.argv[1]
 
 def hash_file(file_path):
     h = hashlib.md5()
@@ -19,8 +23,6 @@ def hash_file(file_path):
                 break
             h.update(chunk)
     return h.hexdigest()
-
-
 
 
 
@@ -37,7 +39,6 @@ while True:
                 logs.append('\t'.join(tta) + '\n')
 
                 f = drive.CreateFile({'title': filename})
-                
                 f.SetContentFile(os.path.join(foldername, filename))
                 f.Upload()
 
@@ -46,7 +47,7 @@ while True:
 
 
             else:
-                logs.append('\t'.join(line) + '\n')
+                logs.append('\t'.join(line))
 
     with open('./log.txt','w') as logFile:
         for i in logs:
